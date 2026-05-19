@@ -20,4 +20,27 @@ public class StudentService {
     public List<Student> getAllStudents(){
         return studentRepository.findAll();
     }
+
+    public Student getStudentById(Long id){
+        return studentRepository.findById(id).orElse(null);
+    }
+
+    public Student updateStudent(Long id, Student updatedStudent){
+        Student existingStudent=studentRepository.findById(id).orElse(null);
+
+        if(existingStudent!=null){
+            existingStudent.setName(updatedStudent.getName());
+            existingStudent.setEmail(updatedStudent.getEmail());
+            existingStudent.setCgpa(updatedStudent.getCgpa());
+            existingStudent.setBranch(updatedStudent.getBranch());
+            existingStudent.setSkills(updatedStudent.getSkills());
+
+            return studentRepository.save(existingStudent);
+        }
+        return null;
+    }
+
+    public void deleteStudent(Long id){
+        studentRepository.deleteById(id);
+    }
 }
