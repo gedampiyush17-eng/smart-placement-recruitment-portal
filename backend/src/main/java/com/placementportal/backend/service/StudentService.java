@@ -2,6 +2,7 @@ package com.placementportal.backend.service;
 
 import com.placementportal.backend.entity.Student;
 import com.placementportal.backend.repository.StudentRepository;
+import com.placementportal.backend.exception.StudentNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +23,10 @@ public class StudentService {
     }
 
     public Student getStudentById(Long id){
-        return studentRepository.findById(id).orElse(null);
+        return studentRepository.findById(id).orElseThrow(()->
+                                                   new StudentNotFoundException("Student not found with id "+ id));
     }
+
 
     public Student updateStudent(Long id, Student updatedStudent){
         Student existingStudent=studentRepository.findById(id).orElse(null);

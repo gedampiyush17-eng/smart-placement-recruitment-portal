@@ -1,6 +1,7 @@
 package com.placementportal.backend.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name="students")
@@ -10,14 +11,21 @@ public class Student {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private long id;
 
+    @NotBlank(message="Name cannot be empty")
     private String name;
 
+    @Email(message="Invalid email format")
+    @NotBlank(message="Email cannot be empty")
     private String email;
 
+    @Min(value=0, message="CGPA cannot be less than 0")
+    @Max(value=10, message="CGPA cannot be greater than 10")
     private Double cgpa;
 
+    @NotBlank(message="Branch cannot be empty")
     private String branch;
 
+    @NotBlank(message="Skills cannot be empty")
     private String skills;
 
     public Student(){

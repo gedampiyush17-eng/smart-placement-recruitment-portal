@@ -5,6 +5,8 @@ import com.placementportal.backend.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 import java.util.List;
 
 @RestController
@@ -15,7 +17,7 @@ public class StudentController {
     private StudentService studentService;
 
     @PostMapping
-    public Student addStudent(@RequestBody Student student){
+    public Student addStudent(@Valid @RequestBody Student student){
         return studentService.saveStudent(student);
     }
 
@@ -30,7 +32,7 @@ public class StudentController {
     }
 
     @PutMapping("/{id}")
-    public Student updateStudent(@PathVariable Long id, @RequestBody Student student){
+    public Student updateStudent(@PathVariable Long id,@Valid @RequestBody Student student){
         return studentService.updateStudent(id,student);
     }
 
