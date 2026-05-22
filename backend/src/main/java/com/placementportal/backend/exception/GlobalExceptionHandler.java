@@ -19,4 +19,13 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(CompanyNotFoundException.class)
+    public ResponseEntity<Map<String,String>> handleCompanyNotFoundException(CompanyNotFoundException ex){
+        Map<String,String> errorResponse = new HashMap<>();
+
+        errorResponse.put("message",ex.getMessage());
+
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+    }
 }
