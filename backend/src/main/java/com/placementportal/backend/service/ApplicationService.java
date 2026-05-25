@@ -4,11 +4,16 @@ import com.placementportal.backend.entity.Application;
 import com.placementportal.backend.repository.ApplicationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import com.placementportal.backend.entity.Company;
 import com.placementportal.backend.entity.Student;
 import com.placementportal.backend.repository.CompanyRepository;
 import com.placementportal.backend.repository.StudentRepository;
+
 
 import java.util.List;
 
@@ -75,6 +80,34 @@ public class ApplicationService {
         application.setStatus(status);
 
         return applicationRepository.save(application);
+    }
+
+    public List<Application> getApplicationsByStatus(String status){
+        return applicationRepository.findByStatus(status);
+    }
+
+    public List<Application> getApplicationsByCompany(Long companyId){
+        return applicationRepository.findByCompanyId(companyId);
+    }
+
+    public List<Application> getApplicationsByStudent(Long studentId){
+        return applicationRepository.findByStudentId(studentId);
+    }
+
+    public long countApplicationsByStatus(String status){
+        return applicationRepository.countByStatus(status);
+    }
+
+    public List<Application> getAllApplicationsSorted(){
+        return applicationRepository.findAll(
+                Sort.by(Sort.Direction.DESC,"id")
+        );
+    }
+
+    public Page<Application> getApplicationsPaginated(int page,int size){
+        Pageable pageable=PageRequest.of(page,size);
+
+        return applicationRepository.findAll(pageable);
     }
 
 }
