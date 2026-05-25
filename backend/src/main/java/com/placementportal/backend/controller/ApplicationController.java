@@ -36,4 +36,10 @@ public class ApplicationController {
 
         return "Application deleted successfully";
     }
+
+    @PutMapping("/{id}/status")
+    public Application updateApplicationStatus(@PathVariable Long id, @RequestParam String status){
+
+        return applicationService.updateApplicationStatus(id,status);
+    }
 }

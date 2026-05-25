@@ -25,16 +25,30 @@ public class ApplicationService {
     private CompanyRepository companyRepository;
 
     public Application saveApplication(Application application){
-        Long studendId=application.getStudent().getId();
+        Long studentId=application.getStudent().getId();
         Long companyId=application.getCompany().getId();
 
-        Student student=studentRepository.findById(studendId)
+        Student student=studentRepository.findById(studentId)
                 .orElseThrow(()->
                         new RuntimeException("Student not found"));
 
         Company company=companyRepository.findById(companyId)
                 .orElseThrow(()->
                         new RuntimeException("Company not found"));
+
+        boolean alreadyApplied=applicationRepository.existsByStudentIdAndCompanyId(studentId,companyId);
+        if(alreadyApplied){
+            throw new RuntimeException("Student already applied to this company");
+        }
+
+        if(student.getCgpa()<company.getMinimumCgpa()){
+            throw new RuntimeException("Student does not meet CGPA criteria");
+        }
+
+        if(!student.getBranch().equalsIgnoreCase(company.getEligibleBranch())){
+            throw new RuntimeException("Student branch is not eligible");
+        }
+
         application.setStudent(student);
         application.setCompany(company);
 
@@ -53,6 +67,14 @@ public class ApplicationService {
         applicationRepository.deleteById(id);
     }
 
+    public Application updateApplicationStatus(Long applicationId, String status){
+        Application application=applicationRepository.findById(applicationId)
+                .orElseThrow(()->
+                        new RuntimeException("Application not found"));
 
+        application.setStatus(status);
+
+        return applicationRepository.save(application);
+    }
 
 }
